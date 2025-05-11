@@ -32,10 +32,37 @@ export function LoginForm() {
     setIsLoading(true);
     setError(null);
 
-    // Form submission will be implemented later
-    console.log("Login data:", data);
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-    setIsLoading(false);
+      const result = await response.json();
+
+      if (!response.ok) {
+        if (result.code === "validation_error") {
+          Object.entries(result.fieldErrors).forEach(([field, errors]) => {
+            form.setError(field as keyof LoginFormData, {
+              message: (errors as string[])[0],
+            });
+          });
+        } else {
+          setError(result.message || "Failed to sign in");
+        }
+        return;
+      }
+
+      // Redirect to home page on successful login
+      window.location.href = "/";
+    } catch {
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -89,7 +116,7 @@ export function LoginForm() {
                 Forgot your password?
               </a>
               <div className="text-muted-foreground">
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <a href="/register" className="text-primary hover:underline">
                   Sign up
                 </a>

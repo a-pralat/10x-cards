@@ -1,23 +1,30 @@
-import { DEFAULT_USER_ID, type SupabaseClient } from "../../db/supabase.client";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import type { GenerationCreateResponse, FlashcardProposal } from "../../types";
 import { createHash } from "crypto";
 import { OpenRouterService } from "../openrouter/openrouter.service";
 import { OpenRouterError } from "../openrouter/openrouter.types";
+import type { Database } from "../../db/database.types";
 
 export class GenerationService {
   private readonly openRouter: OpenRouterService;
   private readonly model = "openai/gpt-4o-mini";
   private readonly logger = console;
+  private readonly userId: string;
 
   constructor(
-    private readonly supabase: SupabaseClient,
-    openRouterConfig?: { apiKey: string }
+    private readonly supabase: SupabaseClient<Database>,
+    private readonly config: { apiKey: string; userId: string }
   ) {
-    if (!openRouterConfig?.apiKey) {
+    if (!config.apiKey) {
       throw new Error("OpenRouter API key is required");
     }
 
-    this.openRouter = this.initializeOpenRouter(openRouterConfig.apiKey);
+    if (!config.userId) {
+      throw new Error("User ID is required");
+    }
+
+    this.userId = config.userId;
+    this.openRouter = this.initializeOpenRouter(config.apiKey);
   }
 
   /**
@@ -174,7 +181,7 @@ Focus on important facts, definitions, concepts, and relationships.`);
     const { data: generation, error } = await this.supabase
       .from("generations")
       .insert({
-        user_id: DEFAULT_USER_ID,
+        user_id: this.userId,
         source_text_hash: data.sourceTextHash,
         source_text_length: data.sourceText.length,
         generated_count: data.generatedCount,
@@ -204,7 +211,7 @@ Focus on important facts, definitions, concepts, and relationships.`);
   ): Promise<void> {
     try {
       await this.supabase.from("error_logs").insert({
-        user_id: DEFAULT_USER_ID,
+        user_id: this.userId,
         error_code: error instanceof Error ? error.name : "UNKNOWN",
         error_message: error instanceof Error ? error.message : String(error),
         model: this.model,

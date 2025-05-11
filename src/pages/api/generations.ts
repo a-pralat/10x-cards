@@ -6,6 +6,20 @@ import { OpenRouterError } from "../../lib/openrouter/openrouter.types";
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, locals }) => {
+  // Check if user is authenticated
+  if (!locals.user) {
+    return new Response(
+      JSON.stringify({
+        error: "Unauthorized",
+        message: "You must be logged in to generate flashcards",
+      }),
+      {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+
   // Validate OpenRouter API key availability
   const apiKey = import.meta.env.OPENROUTER_API_KEY;
   if (!apiKey) {
@@ -40,7 +54,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
 
     // Initialize service and generate flashcards
-    const generationService = new GenerationService(locals.supabase, { apiKey });
+    const generationService = new GenerationService(locals.supabase, { apiKey, userId: locals.user.id });
     const response = await generationService.generateFlashcards(body.source_text);
 
     return new Response(JSON.stringify(response), {

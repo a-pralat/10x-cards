@@ -2,12 +2,25 @@ import type { APIRoute } from "astro";
 import { DatabaseError, FlashcardService } from "../../lib/flashcard/flashcard.service";
 import { CreateFlashcardsSchema } from "../../lib/flashcard/flashcard.schema";
 import type { CreateFlashcardsRequest } from "@/types";
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
+    // Check if user is authenticated
+    if (!locals.user) {
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized",
+          message: "You must be logged in to create flashcards",
+        }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
     // Parse request body
     const body = await request.json();
 
@@ -56,7 +69,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
 
     // Create flashcards
-    const createdFlashcards = await flashcardService.createBatch(DEFAULT_USER_ID, command.flashcards);
+    const createdFlashcards = await flashcardService.createBatch(locals.user.id, command.flashcards);
 
     return new Response(JSON.stringify({ flashcards: createdFlashcards }), {
       status: 201,
