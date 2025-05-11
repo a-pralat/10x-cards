@@ -43,6 +43,8 @@ Ręczne tworzenie fiszek jest czasochłonne i wymaga dużego nakładu pracy, co 
 
 ## 5. Historyjki użytkowników
 
+Uwaga: Wszystkie funkcje poza rejestracją i logowaniem są dostępne tylko dla zalogowanych użytkowników.
+
 ID: US-001  
 Tytuł: Rejestracja konta  
 Opis: Jako nowy użytkownik chcę się zarejestrować, aby korzystać z funkcji tworzenia i zarządzania fiszkami.  
@@ -74,21 +76,21 @@ Kryteria akceptacji:
 
 ID: US-005  
 Tytuł: Edycja i usuwanie fiszek  
-Opis: Jako użytkownik chcę modyfikować oraz usuwać istniejące fiszki, aby mieć pełną kontrolę nad materiałami.  
+Opis: Jako zalogowany użytkownik chcę modyfikować oraz usuwać istniejące fiszki, aby mieć pełną kontrolę nad materiałami.  
 Kryteria akceptacji:
 - W widoku „Moje fiszki” każda fiszka ma opcje „Edytuj” i „Usuń”.
 - Usunięcie wymaga potwierdzenia przed trwałym skasowaniem.
 
 ID: US-006  
 Tytuł: Ręczne tworzenie fiszek  
-Opis: Jako użytkownik chcę samodzielnie dodać nowe fiszki, aby wprowadzać własne materiały.  
+Opis: Jako zalogowany użytkownik chcę samodzielnie dodać nowe fiszki, aby wprowadzać własne materiały.  
 Kryteria akceptacji:
 - Widok „Moje fiszki” zawiera przycisk „Dodaj fiszkę”, otwierający formularz z polami „Przód” i „Tył”.
 - Nowa fiszka pojawia się na liście po zapisaniu.
 
 ID: US-007  
 Tytuł: Sesja nauki  
-Opis: Jako użytkownik chcę uczyć się fiszek w oparciu o algorytm spaced repetition, aby skuteczniej utrwalać wiedzę.  
+Opis: Jako zalogowany użytkownik chcę uczyć się fiszek w oparciu o algorytm spaced repetition, aby skuteczniej utrwalać wiedzę.  
 Kryteria akceptacji:
 - W widoku „Sesja nauki” wyświetlany jest przód fiszki, a użytkownik może odsłonić tył i ocenić poziom opanowania.
 - Algorytm dobiera kolejne fiszki zgodnie z zasadami spaced repetition.
