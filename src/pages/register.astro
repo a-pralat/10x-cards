@@ -1,0 +1,8 @@
+---
+import AuthLayout from "@/layouts/AuthLayout.astro";
+import { RegisterForm } from "@/components/auth/RegisterForm";
+---
+
+<AuthLayout title="Create an account">
+  <RegisterForm client:load />
+</AuthLayout>

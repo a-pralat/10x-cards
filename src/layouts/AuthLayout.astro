@@ -1,0 +1,27 @@
+---
+import Layout from "./Layout.astro";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<Layout title={title}>
+  <div class="min-h-screen flex flex-col items-center justify-center p-4 bg-muted/50">
+    <div class="w-full max-w-md">
+      <div class="mb-8 text-center">
+        <a href="/" class="inline-block">
+          <h1 class="text-2xl font-bold text-primary">10x Cards</h1>
+        </a>
+      </div>
+
+      <slot />
+
+      <div class="mt-8 text-center text-sm text-muted-foreground">
+        <p>&copy; {new Date().getFullYear()} 10x Cards. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</Layout>
