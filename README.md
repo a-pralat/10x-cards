@@ -37,6 +37,13 @@
   - ESLint & Prettier (code quality & formatting)
   - Husky & lint-staged (pre-commit checks)
 
+- **Testing**
+  - Vitest + Testing Library (unit and integration tests)
+  - Playwright (end-to-end tests)
+  - Storybook (UI component testing)
+  - Zod (type validation)
+  - MSW (API mocking)
+
 
 ## Getting Started Locally
 
@@ -96,6 +103,9 @@ In the project root, you can run:
 | `npm run lint`    | Run ESLint on all files                  |
 | `npm run lint:fix`| Fix linting errors automatically         |
 | `npm run format`  | Format code with Prettier                |
+| `npm run test`    | Run unit and integration tests           |
+| `npm run test:e2e`| Run end-to-end tests                     |
+| `npm run storybook`| Start Storybook for UI component testing |
 
 
 ## Project Scope
