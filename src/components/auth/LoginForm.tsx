@@ -65,12 +65,21 @@ export function LoginForm() {
     }
   };
 
+  // Get form state to expose validation info for testing
+  const { formState } = form;
+  const hasEmailError = !!formState.errors.email;
+  const hasPasswordError = !!formState.errors.password;
+
   return (
-    <AuthFormWrapper title="Welcome back" description="Enter your credentials to access your account">
-      {error && <ErrorAlert message={error} />}
+    <AuthFormWrapper
+      title="Welcome back"
+      description="Enter your credentials to access your account"
+      data-test-id="login-form-wrapper"
+    >
+      {error && <ErrorAlert message={error} data-test-id="login-error-alert" />}
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" data-test-id="login-form">
           <FormField
             control={form.control}
             name="email"
@@ -78,9 +87,16 @@ export function LoginForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="you@example.com" disabled={isLoading} {...field} />
+                  <Input
+                    type="email"
+                    placeholder="you@example.com"
+                    disabled={isLoading}
+                    data-test-id="login-email-input"
+                    aria-invalid={hasEmailError}
+                    {...field}
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage data-test-id="email-error-message" />
               </FormItem>
             )}
           />
@@ -92,15 +108,21 @@ export function LoginForm() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" disabled={isLoading} {...field} />
+                  <Input
+                    type="password"
+                    disabled={isLoading}
+                    data-test-id="login-password-input"
+                    aria-invalid={hasPasswordError}
+                    {...field}
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage data-test-id="password-error-message" />
               </FormItem>
             )}
           />
 
           <div className="flex flex-col gap-2">
-            <Button type="submit" disabled={isLoading} className="w-full">
+            <Button type="submit" disabled={isLoading} className="w-full" data-test-id="login-submit-button">
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -112,12 +134,16 @@ export function LoginForm() {
             </Button>
 
             <div className="text-sm text-center space-y-2">
-              <a href="/forgot-password" className="text-primary hover:underline block">
+              <a
+                href="/forgot-password"
+                className="text-primary hover:underline block"
+                data-test-id="forgot-password-link"
+              >
                 Forgot your password?
               </a>
               <div className="text-muted-foreground">
                 Don&apos;t have an account?{" "}
-                <a href="/register" className="text-primary hover:underline">
+                <a href="/register" className="text-primary hover:underline" data-test-id="register-link">
                   Sign up
                 </a>
               </div>

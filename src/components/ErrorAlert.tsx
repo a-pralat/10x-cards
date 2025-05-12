@@ -3,13 +3,14 @@ import { AlertCircle } from "lucide-react";
 
 interface ErrorAlertProps {
   message: string;
+  "data-test-id"?: string;
 }
 
-export function ErrorAlert({ message }: ErrorAlertProps) {
+export function ErrorAlert({ message, "data-test-id": dataTestId }: ErrorAlertProps) {
   return (
-    <Alert variant="destructive">
+    <Alert variant="destructive" data-test-id={dataTestId || "error-alert"}>
       <AlertCircle className="h-4 w-4" />
-      <AlertDescription>{message}</AlertDescription>
+      <AlertDescription data-test-id="error-message">{message}</AlertDescription>
     </Alert>
   );
 }
