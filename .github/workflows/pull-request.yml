@@ -111,13 +111,19 @@ jobs:
         if: ${{ needs.unit-test.result == 'success' && needs.e2e-test.result == 'success' }}
         with:
           script: |
+            const status_table = `
+            | Check | Status |
+            | ----- | ------ |
+            | Lint | '✅ Passed' |
+            | Unit Tests | '✅ Passed' |
+            | E2E Tests | '✅ Passed' |
+            `;
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `### ✅ All checks have passed!` +
-                    `Lint: ✅ \n` +
-                    `Unit Tests: ✅ \n` +
-                    `E2E Tests: ✅ \n\n` +
-                    `Coverage reports have been uploaded to the artifacts section.`
+              body: `### ✅ All checks have passed!\n\n` +
+                    status_table +
+                    `\n\nCoverage reports have been uploaded to the artifacts section.`
             })
