@@ -110,18 +110,20 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const { state: lintState } = context.payload.workflow_run?.jobs?.find(job => job.name === 'Lint Code') || { state: '${{ needs.lint.result }}' };
             const { state: unitTestState } = context.payload.workflow_run?.jobs?.find(job => job.name === 'Unit Tests') || { state: '${{ needs.unit-test.result }}' };
             const { state: e2eTestState } = context.payload.workflow_run?.jobs?.find(job => job.name === 'E2E Tests') || { state: '${{ needs.e2e-test.result }}' };
             
-            const allPassed = unitTestState === 'success' && e2eTestState === 'success';
+            const allPassed = lintState === 'success' && unitTestState === 'success' && e2eTestState === 'success';
             
             const header = allPassed 
-              ? '## ✅ All checks passed!'
-              : '## ❌ Some checks failed!';
+              ? '## ✅ All checks have passed!'
+              : '## ❌ Some checks have failed!';
             
             const body = `
             | Check | Status |
             | ----- | ------ |
+            | Lint | ${lintState === 'success' ? '✅ Passed' : '❌ Failed'} |
             | Unit Tests | ${unitTestState === 'success' ? '✅ Passed' : '❌ Failed'} |
             | E2E Tests | ${e2eTestState === 'success' ? '✅ Passed' : '❌ Failed'} |
             
