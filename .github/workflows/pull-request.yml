@@ -125,5 +125,5 @@ jobs:
               repo: context.repo.repo,
               body: `### ✅ All checks have passed!\n\n` +
                     status_table +
-                    `\n\nCoverage reports have been uploaded to the artifacts section.`
+                    `\n\n[View detailed reports](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID})`
             })
