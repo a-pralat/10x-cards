@@ -114,9 +114,9 @@ jobs:
             const status_table = `
             | Check | Status |
             | ----- | ------ |
-            | Lint | '✅ Passed' |
-            | Unit Tests | '✅ Passed' |
-            | E2E Tests | '✅ Passed' |
+            | Lint | ✅ Passed |
+            | Unit Tests | ✅ Passed |
+            | E2E Tests | ✅ Passed |
             `;
 
             github.rest.issues.createComment({
