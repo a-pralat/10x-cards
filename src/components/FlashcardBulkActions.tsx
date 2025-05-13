@@ -49,6 +49,7 @@ export function FlashcardBulkActions({ flashcards, generationId, disabled, onSuc
       });
 
       onSuccess();
+      window.location.href = "/flashcards";
     } catch (error) {
       setError(error instanceof Error ? error.message : "An unexpected error occurred");
     } finally {

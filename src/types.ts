@@ -42,7 +42,7 @@ export interface CreateFlashcardRequest {
   front: string;
   back: string;
   source: Source;
-  generation_id?: number;
+  generation_id: number | null;
 }
 
 /**
@@ -62,7 +62,7 @@ export type UpdateFlashcardRequest = Partial<{
   front: string;
   back: string;
   source: Source;
-  generation_id?: number;
+  generation_id: number | null;
 }>;
 
 /**
