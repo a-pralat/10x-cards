@@ -30,7 +30,7 @@ export function DeleteConfirmationDialog({ isOpen, onClose, onSuccess, flashcard
       await deleteFlashcard(flashcard.id);
       onSuccess();
       onClose();
-    } catch (err) {
+    } catch {
       // Error is handled by the hook
     }
   };

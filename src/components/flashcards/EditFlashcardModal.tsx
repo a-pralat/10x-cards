@@ -48,7 +48,7 @@ export function EditFlashcardModal({ isOpen, onClose, onSuccess, flashcard }: Ed
       await updateFlashcard(flashcard.id, updateData);
       onSuccess();
       handleClose();
-    } catch (err) {
+    } catch {
       // Error is handled by the hook
     }
   };
