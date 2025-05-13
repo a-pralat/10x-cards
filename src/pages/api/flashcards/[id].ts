@@ -1,6 +1,8 @@
 import type { APIRoute } from "astro";
 import { FlashcardService } from "../../../lib/flashcard-put/flashcard.service";
 import { updateFlashcardSchema } from "../../../lib/flashcard-put/flashcard-schema";
+import { FlashcardDeleteService } from "../../../lib/flashcard-delete/flashcard.service";
+import { DeleteFlashcardParamsSchema } from "../../../lib/flashcard-delete/flashcard.schema";
 
 export const prerender = false;
 
@@ -39,5 +41,71 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
   } catch (error) {
     console.error("Error updating flashcard:", error);
     return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
+  }
+};
+
+export const DELETE: APIRoute = async ({ params, locals }) => {
+  try {
+    // Check if user is authenticated
+    if (!locals.user) {
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized",
+          message: "You must be logged in to delete flashcards",
+        }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Validate path parameter
+    const validationResult = DeleteFlashcardParamsSchema.safeParse(params);
+
+    if (!validationResult.success) {
+      return new Response(
+        JSON.stringify({
+          error: "Validation failed",
+          issues: validationResult.error.issues,
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Delete flashcard
+    const service = new FlashcardDeleteService(locals.supabase);
+    await service.deleteFlashcard(locals.user.id, validationResult.data.id);
+
+    return new Response(
+      JSON.stringify({
+        message: "Flashcard deleted successfully.",
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } catch (error: unknown) {
+    // Log the error for debugging
+    console.error("Error deleting flashcard:", error);
+
+    // Return appropriate error response
+    const status = error instanceof Error && error.message.includes("not found") ? 404 : 500;
+    const message = error instanceof Error ? error.message : "Unknown error occurred";
+
+    return new Response(
+      JSON.stringify({
+        error: status === 404 ? "Not Found" : "Internal server error",
+        message,
+      }),
+      {
+        status,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
 };
