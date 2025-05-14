@@ -103,7 +103,7 @@ export function FiltersAndSortingControls({
           onValueChange={handleSortOrderChange}
           aria-labelledby="sort-order-label"
         >
-          <SelectTrigger className="w-[120px]">
+          <SelectTrigger className="w-[180px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
